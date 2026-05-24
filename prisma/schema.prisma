@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Flavor {
+  id             String        @id @default(cuid())
+  slug           String        @unique
+  name           String
+  category       String
+  description    String
+  flavorProfile  String?
+  imageUrl       String?
+  sourceUrl      String?
+  status         String        @default("current")
+  accentColor    String        @default("#69ff72")
+  caffeineMg     Int?
+  calories       Int?
+  sugarG         Int?
+  introducedYear Int?
+  isRecent       Boolean       @default(false)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  rankingEntry   RankingEntry?
+}
+
+model RankingEntry {
+  id         String   @id @default(cuid())
+  flavorId   String   @unique
+  bucket     String   @default("HAVENT_TRIED")
+  position   Int      @default(0)
+  isFavorite Boolean  @default(false)
+  note       String?
+  updatedAt  DateTime @updatedAt
+  flavor     Flavor   @relation(fields: [flavorId], references: [id], onDelete: Cascade)
+}
