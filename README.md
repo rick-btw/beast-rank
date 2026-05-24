@@ -1,6 +1,6 @@
 # BEAST//RANK
 
-A premium Monster Energy flavor ranking app with a dark cyberpunk interface, admin-only editing, drag-and-drop tiers, flavor search, category filters, generated can art, stats, highlights, recent flavors, and SEO-friendly flavor pages.
+A premium static Monster Energy flavor ranking site with a dark cyberpunk interface, flavor search, category filters, generated can art, stats, highlights, recent flavors, and SEO-friendly flavor pages.
 
 ## Stack
 
@@ -9,25 +9,18 @@ A premium Monster Energy flavor ranking app with a dark cyberpunk interface, adm
 - Tailwind CSS
 - Framer Motion
 - dnd-kit drag and drop
-- Prisma ORM
-- SQLite for local development
-- PostgreSQL/Supabase-ready Prisma schema included
+- Static export for GitHub Pages
 
 ## Project Structure
 
 ```txt
 app/
-  admin/                  Admin login page
-  api/auth/login/         Admin session creation
-  api/auth/logout/        Session clearing
-  api/cans/[slug]/        Dynamic generated can artwork
-  api/rankings/           Admin-only ranking persistence
+  admin/                  Static note about read-only hosting
   flavors/[slug]/         SEO-friendly flavor detail pages
   globals.css             Global design system
   layout.tsx              Metadata and shell
   page.tsx                Ranking board
 components/
-  AdminLogin.tsx
   SafeCanImage.tsx
   ranking/
     BucketRow.tsx
@@ -37,66 +30,31 @@ components/
 data/
   flavors.ts              Researched seed catalog
 lib/
+  can-svg.ts              Shared generated can SVG renderer
   constants.ts            Tier/category constants
-  db.ts                   Prisma singleton
-  queries.ts              Board/flavor data loaders
-  session.ts              Signed HTTP-only admin session
+  public-path.ts          GitHub Pages base-path helper
+  static-board.ts         Static board/flavor data loaders
   utils.ts
-prisma/
-  migrations/             Initial SQL migration
-  schema.prisma           Local SQLite schema
-  schema.postgres.prisma  PostgreSQL/Supabase schema variant
-  seed.ts                 Flavor and ranking seed script
 scripts/
-  ensure-sqlite-db.mjs    Local setup helper
+  generate-static-cans.ts Static fallback can generator
 ```
 
 ## Local Setup
 
 ```bash
 npm install
-cp .env.example .env
-npm run setup
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
 
-Example admin credentials from `.env.example`:
-
-```txt
-admin@beastrank.local
-monsteradmin
-```
-
-Change these before deploying.
-
-## Environment Variables
-
-```txt
-DATABASE_URL="file:./dev.db"
-ADMIN_EMAIL="admin@beastrank.local"
-ADMIN_PASSWORD="monsteradmin"
-AUTH_SECRET="replace-with-a-long-random-secret"
-ADMIN_PASSWORD_HASH=""
-```
-
-`ADMIN_PASSWORD_HASH` is optional. If present, it takes precedence over `ADMIN_PASSWORD`.
-
-Generate a bcrypt hash:
-
-```bash
-node -e "require('bcryptjs').hash('your-password', 12).then(console.log)"
-```
-
 ## Ranking Model
 
-The app stores flavor metadata separately from editable ranking state.
+The public site is static so it can run on GitHub Pages.
 
-- `Flavor` keeps the catalog: name, slug, category, profile, status, source URL, accent color, nutrition hints, and generated image URL.
-- `RankingEntry` keeps admin edits: tier bucket, position, highlight flag, and notes.
-
-Seed runs are safe for your rankings: existing ranking entries are preserved.
+- `data/flavors.ts` keeps the catalog, image URLs, initial tier bucket, position, and highlight flag.
+- `lib/static-board.ts` converts that source data into the board and flavor detail pages.
+- Ranking changes are source edits followed by a rebuild/redeploy.
 
 ## Flavor Data
 
@@ -120,40 +78,38 @@ Sources used for the seed research:
 - [Monster Energy Wiki flavor list](https://monster-energy.fandom.com/wiki/Flavours)
 - [Energy Drink Mania Monster archive](https://www.energydrinkmania.net/en/monster_energy/)
 
-Official image hosts can block hotlinking, so every flavor gets high-quality generated can art at `/api/cans/[slug]`. The UI also has a runtime fallback if any external image is later added and fails.
+Official image hosts can block hotlinking, so tried flavors use local `.webp` assets in `public/cans/`, and every other flavor gets generated static can art in `public/cans/generated/`. The UI falls back to the generated static asset if a custom image fails.
 
-## Vercel and Supabase/PostgreSQL
+## GitHub Pages
 
-For local development, this project defaults to SQLite so it can run immediately. For production PostgreSQL or Supabase:
+This repo includes a GitHub Actions workflow at `.github/workflows/deploy-pages.yml`.
 
-1. Create a Supabase/Postgres database.
-2. Set `DATABASE_URL` in Vercel.
-3. Replace `prisma/schema.prisma` with `prisma/schema.postgres.prisma`, or copy the provider settings into your main schema.
-4. Generate a Postgres migration from that schema.
-5. Run migrations against production before or during deployment.
-6. Set `ADMIN_EMAIL`, `ADMIN_PASSWORD_HASH`, and `AUTH_SECRET` in Vercel.
-7. Use the Vercel build command:
+1. Push the project to GitHub.
+2. In the repo settings, go to **Pages**.
+3. Set **Build and deployment** to **GitHub Actions**.
+4. Push to `main`, or run the workflow manually.
 
-```bash
-npm run vercel-build
-```
-
-For a first hosted seed, run:
+The workflow runs:
 
 ```bash
-npm run seed
+npm ci
+npm run pages:build
 ```
 
-from an environment that has production `DATABASE_URL` configured.
+The build exports the site to `out/`. `next.config.mjs` automatically adds the repository name as the base path when it runs in GitHub Actions, so project pages like `https://username.github.io/repo-name/` load scripts and images correctly.
+
+To test the static export locally:
+
+```bash
+npm run build
+```
 
 ## Verification
 
 Validated locally with:
 
 ```bash
-npm run setup
-npm run seed
 npm run build
 ```
 
-Browser checks covered the viewer board, generated can art, flavor modal, admin login, and autosave on highlight changes.
+The export generates 108 static pages: the board, admin read-only note, not-found page, and all 103 flavor detail pages.

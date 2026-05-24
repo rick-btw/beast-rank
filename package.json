@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "prebuild": "npm run generate:cans",
+    "predev": "npm run generate:cans",
+    "generate:cans": "tsx scripts/generate-static-cans.ts",
     "dev": "next dev",
     "build": "next build",
+    "pages:build": "npm run build",
     "vercel-build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",

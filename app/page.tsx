@@ -1,11 +1,10 @@
-import { getAdminSession } from "@/lib/session";
-import { getBoardData } from "@/lib/queries";
+import { getStaticBoardData } from "@/lib/static-board";
 import RankingExperience from "@/components/ranking/RankingExperience";
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-static";
 
-export default async function HomePage() {
-  const [board, session] = await Promise.all([getBoardData(), getAdminSession()]);
+export default function HomePage() {
+  const board = getStaticBoardData();
 
-  return <RankingExperience initialBoard={board} isAdmin={Boolean(session)} />;
+  return <RankingExperience initialBoard={board} isAdmin={false} />;
 }

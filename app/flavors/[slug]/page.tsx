@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ExternalLink, Star } from "lucide-react";
-import { getFlavorBySlug } from "@/lib/queries";
+import { getStaticFlavorBySlug, getStaticFlavorSlugs } from "@/lib/static-board";
 import { BUCKET_META } from "@/lib/constants";
 import SafeCanImage from "@/components/SafeCanImage";
 
@@ -12,7 +12,7 @@ type Params = {
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
-  const flavor = await getFlavorBySlug(slug);
+  const flavor = getStaticFlavorBySlug(slug);
 
   if (!flavor) {
     return { title: "Flavor Not Found" };
@@ -28,9 +28,13 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   };
 }
 
+export function generateStaticParams() {
+  return getStaticFlavorSlugs().map((slug) => ({ slug }));
+}
+
 export default async function FlavorPage({ params }: Params) {
   const { slug } = await params;
-  const flavor = await getFlavorBySlug(slug);
+  const flavor = getStaticFlavorBySlug(slug);
 
   if (!flavor) notFound();
 

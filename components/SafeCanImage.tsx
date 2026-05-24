@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { publicPath } from "@/lib/public-path";
 
 type Props = {
   src: string | null;
@@ -11,8 +12,8 @@ type Props = {
 };
 
 export default function SafeCanImage({ src, slug, alt, className, loading = "lazy" }: Props) {
-  const fallback = `/api/cans/${slug}`;
-  const [currentSrc, setCurrentSrc] = useState(src ?? fallback);
+  const fallback = publicPath(`/cans/generated/${slug}.svg`);
+  const [currentSrc, setCurrentSrc] = useState(src ? publicPath(src) : fallback);
 
   return (
     <img

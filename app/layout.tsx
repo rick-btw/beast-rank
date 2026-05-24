@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     template: "%s | BEAST//RANK"
   },
   description:
-    "A premium Monster Energy flavor ranking board with admin-only editing, tier lists, flavor search, and a researched flavor archive.",
+    "A premium static Monster Energy flavor ranking board with tier lists, flavor search, and a researched flavor archive.",
   openGraph: {
     title: "BEAST//RANK",
     description: "Monster Energy flavor rankings from best to worst.",
