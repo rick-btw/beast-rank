@@ -288,6 +288,9 @@ export default function RankingExperience({ initialBoard, isAdmin }: Props) {
               <p className="mt-4 max-w-3xl text-sm leading-7 text-white/65 sm:text-base">
                 A dark-mode ranking board for Monster Energy flavors, ordered from best to worst with a separate archive for cans still on the hit list.
               </p>
+              <p className="mt-3 text-xs font-bold uppercase tracking-[0.18em] text-white/38">
+                Curated by Amirali Saket
+              </p>
             </div>
 
             <div className="grid min-w-[240px] grid-cols-3 gap-2 sm:min-w-[360px]">

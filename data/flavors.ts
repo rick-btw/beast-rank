@@ -45,9 +45,8 @@ export const flavorSeeds: FlavorSeed[] = [
     accentColor: "#69ff72",
     caffeineMg: 160,
     calories: 230,
-    initialBucket: "A",
-    initialPosition: 0,
-    isFavorite: true
+    initialBucket: "B",
+    initialPosition: 0
   },
   {
     slug: "zero-sugar",
@@ -201,7 +200,7 @@ export const flavorSeeds: FlavorSeed[] = [
     sourceUrl: monsterWiki,
     status: "regional",
     accentColor: "#ffe11f",
-    initialBucket: "C",
+    initialBucket: "B",
     initialPosition: 1
   },
   {
@@ -299,8 +298,9 @@ export const flavorSeeds: FlavorSeed[] = [
     accentColor: "#ff375e",
     sugarG: 0,
     introducedYear: 2020,
-    initialBucket: "B",
-    initialPosition: 3
+    initialBucket: "A",
+    initialPosition: 1,
+    isFavorite: true
   },
   {
     slug: "ultra-strawberry-dreams",
@@ -508,9 +508,8 @@ export const flavorSeeds: FlavorSeed[] = [
     sourceUrl: `${officialUs}juice-monster/mango-loco/`,
     status: "current",
     accentColor: "#22d6c9",
-    initialBucket: "S",
-    initialPosition: 1,
-    isFavorite: true
+    initialBucket: "A",
+    initialPosition: 0
   },
   {
     slug: "pipeline-punch",
@@ -522,9 +521,8 @@ export const flavorSeeds: FlavorSeed[] = [
     sourceUrl: officialUs,
     status: "current",
     accentColor: "#ff5ca8",
-    initialBucket: "S",
-    initialPosition: 3,
-    isFavorite: true
+    initialBucket: "C",
+    initialPosition: 1
   },
   {
     slug: "pacific-punch",
@@ -536,8 +534,9 @@ export const flavorSeeds: FlavorSeed[] = [
     sourceUrl: officialUs,
     status: "current",
     accentColor: "#ff334b",
-    initialBucket: "A",
-    initialPosition: 7
+    initialBucket: "S",
+    initialPosition: 2,
+    isFavorite: true
   },
   {
     slug: "aussie-style-lemonade",
@@ -640,8 +639,9 @@ export const flavorSeeds: FlavorSeed[] = [
     sourceUrl: energyDrinkMania,
     status: "regional",
     accentColor: "#ffa75c",
-    initialBucket: "B",
-    initialPosition: 10
+    initialBucket: "S",
+    initialPosition: 1,
+    isFavorite: true
   },
   {
     slug: "ripper",
